@@ -18,7 +18,12 @@ import pyarrow as pa
 import pyarrow.csv as pa_csv
 import pyarrow.parquet as pq
 
-from data_formulator.data_loader.external_data_loader import ExternalDataLoader, CatalogNode, MAX_IMPORT_ROWS
+from data_formulator.data_loader.external_data_loader import (
+    ExternalDataLoader,
+    CatalogNode,
+    MAX_IMPORT_ROWS,
+    build_source_filter_where_clause_inline,
+)
 from data_formulator.data_loader import probe_utils
 from data_formulator.datalake.parquet_utils import df_to_safe_records
 from data_formulator.security.path_safety import ConfinedDir
@@ -241,11 +246,43 @@ class LocalFolderDataLoader(ExternalDataLoader):
 
         resolved = self._jail / source_table
         opts = import_options or {}
-        size = opts.get("size", 1_000_000)
+        # Match every other loader: default to the shared cap and clamp to
+        # it. This one defaulted to 1_000_000 and clamped to nothing, so a
+        # file larger than that imported truncated with no signal, and a
+        # caller asking for more than MAX_IMPORT_ROWS was simply obeyed.
+        size = min(opts.get("size", MAX_IMPORT_ROWS), MAX_IMPORT_ROWS)
 
         ext = resolved.suffix.lower()
+        source_filters = opts.get("source_filters") or []
         parquet_total: int | None = None
-        if ext == ".parquet":
+        if ext == ".parquet" and source_filters:
+            # Filtering has to happen INSIDE the read. Without this the loader
+            # takes the first `size` rows of the file and the caller filters
+            # afterwards, which on an interleaved column store is not a subset
+            # of the rows they asked for -- measured on candles_1h.parquet
+            # (4,075,042 rows), the first 2,000,000 hold between 19% (NZDCAD)
+            # and 62% (USDCAD) of each pair, with gaps mid-history and no
+            # error. DuckDB pushes the predicate into the parquet scan, so what
+            # comes back is every matching row up to `size`.
+            import duckdb
+
+            where = build_source_filter_where_clause_inline(
+                source_filters, quote_char='"', dialect="duckdb",
+            )
+            path_lit = str(resolved).replace("'", "''")
+            con = duckdb.connect()
+            try:
+                parquet_total = con.execute(
+                    f"SELECT count(*) FROM read_parquet('{path_lit}') {where}"
+                ).fetchone()[0]
+                # fetch_arrow_table, not .arrow(): the latter hands back a
+                # RecordBatchReader on current duckdb, not a Table.
+                table = con.execute(
+                    f"SELECT * FROM read_parquet('{path_lit}') {where} LIMIT {int(size)}"
+                ).fetch_arrow_table()
+            finally:
+                con.close()
+        elif ext == ".parquet":
             # Read only as far as `size`. pq.read_table materialises the whole
             # file and the slice below then throws most of it away, which is
             # cheap for a spreadsheet-sized export and expensive for a real
@@ -294,6 +331,15 @@ class LocalFolderDataLoader(ExternalDataLoader):
 
         if table.num_rows > size:
             table = table.slice(0, size)
+
+        # Truncation is otherwise silent: the import route reports the rows
+        # it kept, not the rows the file holds.
+        if self._last_total_rows and self._last_total_rows > table.num_rows:
+            logger.warning(
+                "Truncated %s: kept %d of %d rows (size=%d). Filter at the "
+                "source or raise `size` if you need the rest.",
+                source_table, table.num_rows, self._last_total_rows, size,
+            )
 
         logger.info(
             "Fetched %d rows from local file: %s",
