@@ -358,7 +358,7 @@ const initialState: DataFormulatorState = {
         defaultChartHeight: 300,
         maxStretchFactor: 1.5,
         frontendRowLimit: DEFAULT_ROW_LIMIT,
-        paletteKey: 'fluent',
+        paletteKey: 'hughquant',
     },
 
     dataLoaderConnectParams: {},

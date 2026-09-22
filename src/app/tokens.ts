@@ -11,28 +11,32 @@ import type { SxProps } from '@mui/material';
 
 // ── Border colors ──────────────────────────────────────────────────────
 
+// Hugh.Quant runs dark permanently (see App.tsx's `mode: 'dark'`), so these
+// are light-on-dark (white-alpha) rather than MUI's stock dark-on-light —
+// a literal `rgba(0,0,0,x)` border is close to invisible against the
+// `#0c0c0c`/`#1a1a1a` background these panels actually sit on.
 export const borderColor = {
     /** 0.12 — section dividers, table borders, tab underlines, sidebar edges
      *  DataLoadingChat, ExplComponents, RefreshDataDialog, ReportView tables,
      *  TableSelectionView, DataLoadingThread, DBTableManager */
-    divider: 'rgba(0, 0, 0, 0.12)',
+    divider: 'rgba(255, 255, 255, 0.12)',
 
     /** 0.10 — inner components: cards, chips, inputs, thumbnails
      *  DataThreadCards table card, EncodingShelfCard tab divider */
-    component: 'rgba(0, 0, 0, 0.10)',
+    component: 'rgba(255, 255, 255, 0.10)',
 
     /** 0.12 — outer containers: panels, dialogs, popovers, drop zones
      *  DataThread popups, UnifiedDataUploadDialog, AgentRulesDialog */
-    view: 'rgba(0, 0, 0, 0.12)',
+    view: 'rgba(255, 255, 255, 0.12)',
 } as const;
 
 /** Right edge of the collapsible sidebar: quiet when docked, clearer when it
  *  floats over the workspace. Kept separate from generic view borders because
  *  this edge is also a resize affordance. */
 export const sidebarEdge = {
-    border: 'rgba(0, 0, 0, 0.08)',
-    dockedShadow: '3px 0 10px -8px rgba(0, 0, 0, 0.32)',
-    overlayShadow: '5px 0 16px -8px rgba(0, 0, 0, 0.32)',
+    border: 'rgba(255, 255, 255, 0.10)',
+    dockedShadow: '3px 0 10px -8px rgba(0, 0, 0, 0.6)',
+    overlayShadow: '5px 0 16px -8px rgba(0, 0, 0, 0.6)',
 } as const;
 
 // ── Composite border styles (spread into sx) ───────────────────────────
@@ -246,6 +250,21 @@ export const palettes: Record<string, AppPalette> = {
         warning:   { main: '#cc3333' },
     },
 
+    /** Hugh.Quant — Ferrari red on carbon, silver trim.
+     *  Primary/Secondary: Rosso Corsa red ↔ brushed silver; derived is a
+     *  heritage gold, custom a racing-orange accent (brake-caliper orange).
+     *  All textColors are LIGHTENED for legibility against the dark
+     *  background (App.tsx's `mode: 'dark'`) rather than darkened — this is
+     *  the inverse of the light-mode palettes above. */
+    hughquant: {
+        name: 'Hugh.Quant',
+        primary:   { main: '#D40000', bgcolor: 'rgba(212, 0, 0, 0.16)',   textColor: '#FF5C4D' },   // Rosso Corsa
+        secondary: { main: '#B0B0B0', bgcolor: 'rgba(176, 176, 176, 0.16)', textColor: '#E0E0E0' },  // brushed silver
+        derived:   { main: '#C9A227', bgcolor: 'rgba(201, 162, 39, 0.16)',  textColor: '#E6C563' },  // heritage gold
+        custom:    { main: '#FF6B00', bgcolor: 'rgba(255, 107, 0, 0.16)',   textColor: '#FF9248' },  // caliper orange
+        warning:   { main: '#FFB300' },
+    },
+
     /** Mono — minimalist black & white, ink-on-paper
      *  Achromatic palette with pure grayscale tones */
     mono: {
@@ -259,7 +278,7 @@ export const palettes: Record<string, AppPalette> = {
 } as const;
 
 /** Default palette key (used when no user preference is stored). */
-export const defaultPaletteKey: keyof typeof palettes = 'fluent';
+export const defaultPaletteKey: keyof typeof palettes = 'hughquant';
 
 /** List of palette keys in display order */
 export const paletteKeys = Object.keys(palettes) as (keyof typeof palettes)[];

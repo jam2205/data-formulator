@@ -186,7 +186,7 @@ declare module '@mui/material/styles' {
     }
 }
 
-export const toolName = "Data Formulator"
+export const toolName = "Hugh.Quant"
 
 const LANGUAGE_LABELS: Record<string, string> = {
     en: 'EN',
@@ -1550,12 +1550,20 @@ export const AppFC: FC<AppFCProps> = function AppFC(appProps) {
         },
         // Default Material UI palette
         // Active palette from user config — selectable via Settings dialog
-        // Available: material, fluent, vivid, jewel, electric, tealCoral, copilot
+        // Available: material, fluent, vivid, jewel, electric, tealCoral, copilot, hughquant
         palette: (() => {
             const p = palettes[activePaletteKey];
             const bg = (entry: { main: string; bgcolor?: string }) => entry.bgcolor ?? alpha(entry.main, bgAlpha);
             const tc = (entry: { main: string; textColor?: string }) => entry.textColor ?? entry.main;
             return {
+                // Hugh.Quant runs dark permanently — carbon background, Ferrari red
+                // primary, silver secondary/trim. MUI's dark-mode elevation overlay
+                // lightens `background.paper` per elevation automatically from this
+                // base, so panels/dialogs/menus don't need per-component overrides.
+                mode: 'dark' as const,
+                background: { default: '#0c0c0c', paper: '#1a1a1a' },
+                text: { primary: '#ececeb', secondary: '#a8a8a8', disabled: '#6b6b6b' },
+                divider: 'rgba(255, 255, 255, 0.12)',
                 primary:   { main: p.primary.main,   bgcolor: bg(p.primary),   textColor: tc(p.primary)   },
                 secondary: { main: p.secondary.main, bgcolor: bg(p.secondary), textColor: tc(p.secondary) },
                 derived:   { main: p.derived.main,   bgcolor: bg(p.derived),   textColor: tc(p.derived)   },
