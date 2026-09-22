@@ -1,0 +1,638 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_garch_volatility",
+      "description": "Real GARCH(1,1) fits computed on the Jetson. A MISSING fit is reported explicitly, never as zero volatility \u2014 the engine drops non-stationary fits (alpha+beta>=1) and any pair/timeframe with fewer than 100 observations. Intraday fits are the least trustworthy: plain GARCH misreads FX session seasonality as volatility clustering.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "tf": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pair"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_markov_regime",
+      "description": "Empirical regime-transition matrix from the Jetson's live HMM classifiers. ALWAYS picks one vocabulary: 'directional_v1' (BULL/BEAR/SIDEWAYS, from markov_minion) or 'volatility_phase_v1' (EXPANSION/COMPRESSION/EXHAUSTION, from deep_hmm_regime). The two are orthogonal axes and must never be pooled \u2014 a BULL->EXPANSION 'transition' is two classifiers disagreeing, not a state change.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "vocabulary": {
+            "type": "string",
+            "enum": [
+              "directional_v1",
+              "volatility_phase_v1"
+            ]
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pair"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_seasonal_bias",
+      "description": "Two different things, deliberately separated. seasonal_deviation is FULL-SAMPLE (it has lookahead) and is for RANKING pairs by |z_score| only. latestPointInTimeBias comes from seasonal_bias_asof, which uses only years strictly before the target \u2014 that is the one safe to join per-bar. A NULL bias score means too few prior years to say, never 'no seasonal bias'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "month": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          }
+        },
+        "required": [
+          "pair"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_key_levels",
+      "description": "Dealer PDH/PDL/PDM/PWH/PWL and 20D range, gamma strikes and session anchors/sigma targets for a pair, with distance in pips from the latest closed bar. Needs NO chart. session='next' (default) computes dealer levels for the NEXT trading session on the NY-weekday convention, so over a weekend PDH/PDL are Friday's \u2014 which is what you want for Monday. session='jetson' instead returns the Jetson's own dealers_levels row as served, whose weekend rows count as sessions. Pass include_pine to also get a ready-to-paste Pine v6 indicator.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "session": {
+            "type": "string",
+            "enum": [
+              "next",
+              "jetson"
+            ]
+          },
+          "as_of": {
+            "type": "string",
+            "description": "ISO timestamp \u2014 compute levels as they stood then."
+          },
+          "datasets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Limit to some of: dealers_levels, gamma_levels, session_ranges."
+          },
+          "include_pine": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "pair"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_monte_carlo_forecast",
+      "description": "Resamples the pair's REAL historical hourly returns with replacement rather than assuming lognormal/GBM, so the fan carries the pair's actual fat tails and skew. Returns quantile bands per horizon bar. The fan starts from ml_ready's latest close, which over a weekend is Friday's.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "horizon_bars": {
+            "type": "integer"
+          },
+          "num_paths": {
+            "type": "integer"
+          },
+          "lookback_bars": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pair"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_signal_significance_test",
+      "description": "Does a signal actually predict the anti-lookahead forward return in walk_forward_labels, or is the apparent edge indistinguishable from randomly shuffled labels? Uses an as-of join (a label only ever sees a signal known at or before it), keeps ONLY non-overlapping forward windows so one price move cannot be counted many times, and refuses to produce a p-value when the sample is too thin.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "signal": {
+            "type": "string",
+            "enum": [
+              "markov_directional",
+              "seasonal_bias"
+            ]
+          },
+          "label_set": {
+            "type": "string"
+          },
+          "lookback_limit": {
+            "type": "integer"
+          },
+          "num_permutations": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pair",
+          "signal"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_model_scoreboard",
+      "description": "Scores the Jetson's time-series models (river, kronos, hmm) against its own naive persistence baseline on the same predictions, with an exact McNemar test and Wilson CIs. Counts ONLY non-overlapping prediction windows by default \u2014 pooling overlapping ones inflates n and makes edges appear that are not there. Benjamini-Hochberg q-values are reported across all groups: treat a verdict as a finding only when survivesFdr is true.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "since_days": {
+            "type": "integer"
+          },
+          "min_n": {
+            "type": "integer"
+          },
+          "slice": {
+            "type": "string",
+            "enum": [
+              "none",
+              "pair",
+              "session_segment",
+              "day_of_week",
+              "hmm_directional_state",
+              "hmm_volatility_phase",
+              "market_cycle_state",
+              "volatility_state",
+              "week_of_quarter"
+            ]
+          },
+          "non_overlapping": {
+            "type": "boolean"
+          },
+          "pair": {
+            "type": "string"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "timeframe": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_trevo_survivors",
+      "description": "Survivors of the weekly genetic search over boolean feature trees. train/oos Sharpe are the GA's OWN numbers \u2014 its in-house gate, NOT an independent verdict (use lean_validation for that). vetoedByNullTest flags a survivor whose train Sharpe failed to beat 3x a shuffled null. A run with zero survivors writes no rows here at all.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_lean_validation",
+      "description": "ADVISORY only \u2014 nothing here gates execution. LEAN walks a survivor's own fire array bar-by-bar through a strictly-causal engine over a hold-out the GA never trained on, so a disagreement is about the ENGINE, not a re-implementation. zeroSpreadBacktest is TRUE: prices are bid==ask==mid, so leanSharpe is evidence about point-in-time correctness, NOT about paying costs. Judge on leanSharpe vs gaOosSharpe, never on net profit. ok=false rows are refusals, not zeros.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "strategy_id": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_query_sql",
+      "description": "Runs one read-only SQL statement over Jetson datasets loaded into an in-memory DuckDB. Use DATASET NAMES as table names (e.g. SELECT * FROM candles_1h LIMIT 5); market_bars is an alias for candles_1h. Each table holds at most the newest `rows_per_dataset` rows for the pair you pass \u2014 raise it to reach further back. Datasets keyed by CURRENCY get both legs of the pair. Time functions run in UTC.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sql": {
+            "type": "string",
+            "description": "A single read statement (SELECT/WITH/FROM/DESCRIBE/SUMMARIZE/SHOW/PIVOT/EXPLAIN)."
+          },
+          "pair": {
+            "type": "string",
+            "description": "Required when any referenced dataset is filtered by pair or currency."
+          },
+          "datasets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Extra datasets to load that the SQL text does not name literally."
+          },
+          "rows_per_dataset": {
+            "type": "integer",
+            "description": "Newest rows loaded per table (default 2000)."
+          },
+          "max_result_rows": {
+            "type": "integer",
+            "description": "Rows returned (default 200)."
+          },
+          "since": {
+            "type": "string",
+            "description": "ISO date lower bound passed to the datasets that accept it."
+          }
+        },
+        "required": [
+          "sql"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_provide_ai_context",
+      "description": "Builds compact markdown describing a pair's CURRENT state from the live Jetson, grouped by the source notes in sources/ (price, volatility, levels, positioning, momentum, regime, confluence, seasonality, calendar). Every dataset shows its as-of time and age, so stale data is visible rather than read as current. Validation datasets (forward returns) are never included.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Limit to some source groups (see source_graph)."
+          },
+          "max_chars_per_row": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pair"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_live_bars",
+      "description": "Recent bars from the live tick pipeline. Crosses are synthesized from two majors, not observed quotes.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string",
+            "description": "e.g. EURUSD"
+          },
+          "tf": {
+            "type": "string",
+            "description": "1M | 5M | 15M | 1H (default 1M)"
+          },
+          "limit": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 5000
+          }
+        },
+        "required": [
+          "pair"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_live_pairs",
+      "description": "The pairs the live tick pipeline carries, split into real IG majors and synthesized crosses, with per-file age. Age is file mtime and the daemon rewrites files even when no new ticks land \u2014 so a fresh age proves the writer is alive, NOT that data is flowing.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_source_graph",
+      "description": "The dataset registry built from the markdown notes in sources/: which groups exist, which datasets each contains, what each feeds, and \u2014 checked against the live Jetson catalog \u2014 which are actually served, how old they are, and which notes reference datasets that no longer exist.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "include_mermaid": {
+            "type": "boolean"
+          },
+          "include_graph_json": {
+            "type": "boolean"
+          },
+          "write_markdown": {
+            "type": "boolean",
+            "description": "Write sources/_graph.md."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Write the markdown even when the Jetson is unreachable."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_chainlog_query",
+      "description": "Search the shared append-only research record that Gemini CLI, Claude and Colab jobs all write to. Filter by agent, entry kind (hypothesis/run/result/verdict/correction/note), verdict or free text. Start here before proposing an experiment \u2014 it is how you find out the question was already answered, or answered and then corrected.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "verbose": {
+            "type": "boolean",
+            "description": "Full entry bodies. Default false returns one line per entry. Bodies here run to thousands of characters and an agent re-sends every tool result on each subsequent step, so ask for them only when you need them."
+          },
+          "agent": {
+            "type": "string",
+            "enum": [
+              "gemini",
+              "claude",
+              "colab",
+              "deepseek",
+              "human"
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hypothesis",
+              "run",
+              "result",
+              "verdict",
+              "correction",
+              "note"
+            ]
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "rejected",
+              "inconclusive"
+            ]
+          },
+          "grep": {
+            "type": "string",
+            "description": "Free-text match over the whole entry."
+          },
+          "since": {
+            "type": "string",
+            "description": "ISO timestamp lower bound."
+          },
+          "limit": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_registry_show",
+      "description": "Every recorded test of one feature, plus the chainlog entry each cites. If a row's chainlog_ref does not resolve it is reported as a dangling reference \u2014 that row's method is not on the record and it should not be trusted.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "feature": {
+            "type": "string",
+            "description": "feature_name, or a feature_id prefix."
+          }
+        },
+        "required": [
+          "feature"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_mcl_compute_wilson_ci",
+      "description": "Asymmetric binomial confidence interval for wins/total. Use this rather than the normal approximation, which is the one people reach for and which breaks exactly where it matters: at small n, or when the rate is near 0 or 1, it produces intervals that run past [0,1] and under-cover. Reports n<30 as provisional. Note the interval assumes INDEPENDENT trials \u2014 if your trials are overlapping windows or correlated pairs, n is not what you think and the interval is too tight regardless of which formula you use.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "wins": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "total_trials": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0.5,
+            "maximum": 0.999,
+            "description": "Default 0.95."
+          }
+        },
+        "required": [
+          "wins",
+          "total_trials"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_mcl_discretize_feature",
+      "description": "Bins a feature into k buckets using ONLY data available at each bar. QUANTILE_ROLLING takes the quantile of a trailing window; VOLATILITY_NORMALIZED divides by trailing ATR first. The distinction that matters: binning on full-sample quantiles \u2014 which is what pandas.qcut over a whole column does \u2014 leaks the future into every early bar, because the bin edges were computed from data that had not happened yet. Bars before the window fills are returned as bin null, never forced into a bucket.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string",
+            "description": "EURUSD or EUR_USD; both accepted."
+          },
+          "feature_name": {
+            "type": "string",
+            "description": "Column in the dataset, e.g. 'close', 'atr_14', 'return_1'."
+          },
+          "dataset": {
+            "type": "string",
+            "description": "Default ml_ready."
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "QUANTILE_ROLLING",
+              "VOLATILITY_NORMALIZED"
+            ]
+          },
+          "k_bins": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 10,
+            "description": "Default 3 (terciles)."
+          },
+          "lookback_w": {
+            "type": "integer",
+            "minimum": 20,
+            "maximum": 5000,
+            "description": "Trailing window, default 500."
+          },
+          "limit": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 20000
+          }
+        },
+        "required": [
+          "pair",
+          "feature_name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_mcl_anchor_event",
+      "description": "Locates discrete session transitions \u2014 LONDON_OPEN (08:00 UTC), US_ORB_1000 (10:00 New York) and NY_MIDNIGHT \u2014 and returns the bar at each, with the range that followed. Anchors are the FX session grid, so they respect the 17:00 New York roll: Friday ends at the close and Sunday evening counts toward Monday. Weekend bars carry no session and are excluded rather than silently bucketed into the wrong day.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string"
+          },
+          "catalyst": {
+            "type": "string",
+            "enum": [
+              "LONDON_OPEN",
+              "US_ORB_1000",
+              "NY_MIDNIGHT"
+            ]
+          },
+          "lookback_days": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 400,
+            "description": "Default 30."
+          },
+          "orb_minutes": {
+            "type": "integer",
+            "minimum": 15,
+            "maximum": 240,
+            "description": "Range window after the anchor, default 60."
+          }
+        },
+        "required": [
+          "pair",
+          "catalyst"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  }
+]
