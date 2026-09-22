@@ -118,6 +118,30 @@ because the number looked clean.
 `qb_chainlog_query` / `qb_registry_show` are the exception: those ARE already
 the record. Reading them is reading a finding, not manufacturing one.
 
+## Check the record before presenting a directional or seasonal read
+
+Before surfacing a positioning, seasonal, or regime observation as
+noteworthy for a pair -- the kind of thing that reads as "worth watching" --
+call `qb_chainlog_query` for that pair/feature first. If it has already
+been tested and has a verdict, say so and give that verdict, rather than
+presenting the same observation as if it were fresh.
+
+This happened for real, 2026-09-22: a USDCHF COT-positioning observation
+made here ("89th percentile now vs. a 53rd-percentile seasonal norm,
+off-calendar crowding") went through the full loop -- generalized
+cross-pair, pre-registered, tested two ways on properly powered data -- and
+was REJECTED both times (`c-129522fd`, `c-156d5670`); USDCHF itself scored
+negative in both re-tests, the opposite direction from the original read.
+A later session asking about COT positioning on USDCHF without checking
+the chainlog first would repeat exactly this observation as if it were
+new.
+
+This is a context check, not a critique -- you are not the critic here (see
+`fx-research/_core/ROUTING.md`'s WHO table: annotations, not stage 7), and
+you are not being asked to judge whether the prior verdict was right. Just
+surface it, plainly, before adding another "worth watching" read on top of
+one that already has an answer.
+
 ## Practical notes
 
 - If a call fails with "quant-bridge unreachable", the `bridge: serve :3100`
