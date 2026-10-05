@@ -701,5 +701,23 @@
         "$schema": "http://json-schema.org/draft-07/schema#"
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_toolbox",
+      "description": "The research methods on record, one per tool note in framework/tools/: the question each answers, where its code is, which hypotheses and findings used it, and whether it can be called as a tool or only run inside a pre-registered fx-research job. Look here before designing a test, so an existing method is used instead of a new one being invented. Pass `id` for one method's full note. Read-only.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A tool note id, e.g. 'monte-carlo-checks'. Omit to list every method."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
   }
 ]

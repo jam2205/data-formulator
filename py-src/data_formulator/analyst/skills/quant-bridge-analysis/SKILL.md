@@ -39,6 +39,7 @@ tools:
   - qb_mcl_anchor_event
   - qb_event_range_band
   - qb_claim_seen
+  - qb_toolbox
 actions: []
 ---
 
@@ -51,7 +52,7 @@ to `POST /api/tool/<name>` -- the exact same dispatch the research-harness UI
 and the Claude Code chat in VSCodium use, so a number you get here is a number
 those would also get. There is no separate implementation to drift.
 
-All 21 tools here are **read-only**. quant-bridge blocks the mutating half of
+All 22 tools here are **read-only**. quant-bridge blocks the mutating half of
 its catalog over REST by default (`annotate_chart`, `chainlog_append`,
 `registry_record`, `export_arrow_ipc`) -- they are not in this skill's list at
 all, deliberately. This skill can look and compute; it cannot draw on a live
@@ -112,6 +113,26 @@ chart or write to the research record.
   one plain-English sentence and it ranks the earlier verdicts (chainlog and
   framework hypotheses, ids `fw:...`) closest to it. It costs a paid call, so
   see the rule below.
+
+- **`qb_toolbox`** -- the research methods on record: what question each
+  answers, where its code is, which hypotheses and findings used it. Free and
+  local. Call it with no arguments to list them, or with `id` for one
+  method's full note.
+
+## Suggest a method from the toolbox, do not invent one
+
+When an observation looks worth testing, call `qb_toolbox` and name the
+existing method that fits (for example `monte-carlo-checks` for "was this
+luck?", `walk-forward-rules` for a rule with fitted parameters,
+`event-study` for "what happened after this event?"). Say which question the
+method answers and where it was used before.
+
+Each method says whether it is `callable`. If it is, you may call that tool
+(its name here carries the `qb_` prefix).
+If it is not, it runs only inside a pre-registered fx-research job: **do not
+re-implement it here** with `qb_query_sql` or generated code and present the
+output as that method's result. A bootstrap or walk-forward written on the
+spot has none of the checks the real one carries. Propose the job instead.
 
 ## Discipline: what this skill's output is, and is not
 
