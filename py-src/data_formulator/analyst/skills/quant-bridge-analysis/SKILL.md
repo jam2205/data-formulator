@@ -33,6 +33,7 @@ tools:
   - qb_live_pairs
   - qb_source_graph
   - qb_chainlog_query
+  - qb_chainlog_chain
   - qb_registry_show
   - qb_mcl_compute_wilson_ci
   - qb_mcl_discretize_feature
@@ -52,7 +53,7 @@ to `POST /api/tool/<name>` -- the exact same dispatch the research-harness UI
 and the Claude Code chat in VSCodium use, so a number you get here is a number
 those would also get. There is no separate implementation to drift.
 
-All 22 tools here are **read-only**. quant-bridge blocks the mutating half of
+All 23 tools here are **read-only**. quant-bridge blocks the mutating half of
 its catalog over REST by default (`annotate_chart`, `chainlog_append`,
 `registry_record`, `export_arrow_ipc`) -- they are not in this skill's list at
 all, deliberately. This skill can look and compute; it cannot draw on a live
@@ -96,6 +97,10 @@ chart or write to the research record.
 - **`qb_chainlog_query`** -- search the shared append-only research record
   Gemini, Claude and Colab jobs all write to. Check here before re-deriving
   something that may already have a verdict.
+- **`qb_chainlog_chain`** -- one research thread root-first: the hypothesis, its
+  runs, the verdict and any correction after it. Use it on an id that
+  `qb_claim_seen` or `qb_chainlog_query` returned, especially one marked
+  later challenged, before quoting its verdict.
 - **`qb_registry_show`** -- every recorded test of one feature, with the
   chainlog entry each cites.
 - **`qb_mcl_compute_wilson_ci`** -- asymmetric CI for wins/total; use instead

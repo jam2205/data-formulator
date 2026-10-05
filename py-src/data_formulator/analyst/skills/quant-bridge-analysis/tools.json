@@ -446,8 +446,10 @@
               "claude",
               "colab",
               "deepseek",
-              "human"
-            ]
+              "human",
+              "jev"
+            ],
+            "description": "`jev` entries are write-up screens hung off verdicts, not results."
           },
           "kind": {
             "type": "string",
@@ -482,6 +484,27 @@
             "maximum": 200
           }
         },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_chainlog_chain",
+      "description": "Walks an entry back to its root and prints the whole thread in order: hypothesis, the runs it spawned, their results, any correction, and the verdict. This is how you pick up someone else's work cold \u2014 and how you see that a result was later superseded, since a correction sits in the same thread as the thing it corrects rather than replacing it.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Entry id, or a unique prefix."
+          }
+        },
+        "required": [
+          "id"
+        ],
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       }
