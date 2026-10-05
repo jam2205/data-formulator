@@ -634,5 +634,72 @@
         "$schema": "http://json-schema.org/draft-07/schema#"
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_event_range_band",
+      "description": "Projected high and low for the New York session after NFP, CPI or an FOMC decision: the last close before the release, plus and minus a multiple of the 5-day average daily range that depends on the volatility regime. Tested out of sample: the whole post-release move stays inside the band about 80% of the time (CPI 71% -- a wider CPI band is returned beside it). A RANGE, not a direction. USD majors only. With no date it uses the next release; before the event day the figures are provisional and say so.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "string",
+            "description": "One of EURUSD GBPUSD USDJPY USDCHF USDCAD AUDUSD NZDUSD."
+          },
+          "event": {
+            "type": "string",
+            "enum": [
+              "NFP",
+              "CPI",
+              "FOMC"
+            ],
+            "description": "Which release. Default: whichever comes next."
+          },
+          "date": {
+            "type": "string",
+            "description": "Release date in New York, YYYY-MM-DD. Default: the next release not yet closed."
+          },
+          "as_of": {
+            "type": "string",
+            "description": "ISO time to compute as of (only bars closed by then are used). Default: now."
+          }
+        },
+        "required": [
+          "pair"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "qb_claim_seen",
+      "description": "Ranks earlier verdicts -- the chainlog's, and the hypothesis notes in framework/ (ids `fw:...`) -- by how close their claim is to a new one stated in plain English. Run it ONCE per claim, before proposing or registering a test: it is how a rejected idea avoids being tested twice. One paid Jev call per distinct claim (cached on disk). The ranking is a pointer to what to read, not a ruling: `later_challenged` means a correction or re-run hangs off that verdict, so read its chain with chainlog_chain before relying on it.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 12,
+            "maxLength": 600,
+            "description": "The whole claim in one sentence, e.g. \"weekend gaps fill more often than an equivalent mid-week move\"."
+          },
+          "top": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 5,
+            "description": "How many closest verdicts to return, up to 5. Default 5."
+          }
+        },
+        "required": [
+          "claim"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      }
+    }
   }
 ]

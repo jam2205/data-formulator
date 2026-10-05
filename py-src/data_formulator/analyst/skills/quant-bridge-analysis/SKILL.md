@@ -37,6 +37,8 @@ tools:
   - qb_mcl_compute_wilson_ci
   - qb_mcl_discretize_feature
   - qb_mcl_anchor_event
+  - qb_event_range_band
+  - qb_claim_seen
 actions: []
 ---
 
@@ -49,7 +51,7 @@ to `POST /api/tool/<name>` -- the exact same dispatch the research-harness UI
 and the Claude Code chat in VSCodium use, so a number you get here is a number
 those would also get. There is no separate implementation to drift.
 
-All 19 tools here are **read-only**. quant-bridge blocks the mutating half of
+All 21 tools here are **read-only**. quant-bridge blocks the mutating half of
 its catalog over REST by default (`annotate_chart`, `chainlog_append`,
 `registry_record`, `export_arrow_ipc`) -- they are not in this skill's list at
 all, deliberately. This skill can look and compute; it cannot draw on a live
@@ -102,6 +104,15 @@ chart or write to the research record.
 - **`qb_mcl_anchor_event`** -- locates session transitions (LONDON_OPEN,
   US_ORB_1000, NY_*) as anchor points for an event study.
 
+- **`qb_event_range_band`** -- the event-day New York range band: how far
+  price is likely to travel after NFP, CPI or FOMC, as a band around the last
+  close before the release. A RANGE, not a direction. It serves one tested
+  definition; do not re-derive it with a different window or reference price.
+- **`qb_claim_seen`** -- "has this already been tested?" Give it a claim in
+  one plain-English sentence and it ranks the earlier verdicts (chainlog and
+  framework hypotheses, ids `fw:...`) closest to it. It costs a paid call, so
+  see the rule below.
+
 ## Discipline: what this skill's output is, and is not
 
 **What you compute or read here is a candidate observation, not a finding.**
@@ -125,6 +136,15 @@ noteworthy for a pair -- the kind of thing that reads as "worth watching" --
 call `qb_chainlog_query` for that pair/feature first. If it has already
 been tested and has a verdict, say so and give that verdict, rather than
 presenting the same observation as if it were fresh.
+
+**Before suggesting that an observation should become a test, call
+`qb_claim_seen` ONCE with the claim as one sentence.** Once per claim in a
+run -- never in a loop, never once per pair, and not for a question that is
+only about reading a chart. If the closest verdict has a high probability,
+report its id and verdict ("already rejected as `fw:...`") instead of
+proposing the test again. `later_challenged: true` means a correction or
+re-run hangs off that verdict: say so, do not quote it as settled. The
+ranking points at what to read; it is not itself a finding.
 
 This happened for real, 2026-09-22: a USDCHF COT-positioning observation
 made here ("89th percentile now vs. a 53rd-percentile seasonal norm,
