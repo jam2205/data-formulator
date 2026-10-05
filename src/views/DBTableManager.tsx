@@ -723,14 +723,14 @@ export const DataLoaderForm: React.FC<{
             {isConnecting && <Box sx={{
                 position: "absolute", top: 0, left: 0, width: "100%", height: "100%", 
                 display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 1, zIndex: 1000,
-                backgroundColor: "rgba(255, 255, 255, 0.85)"
+                backgroundColor: "rgba(18, 18, 18, 0.85)"
             }}>
                 <CircularProgress size={20} />
                 {connectProgress && (
                     <Typography sx={{
                         fontSize: textVar.sm, fontWeight: 500, color: 'text.primary',
                         textAlign: 'center', px: 1.5, py: 0.5, maxWidth: 380, wordBreak: 'break-word',
-                        backgroundColor: 'rgba(255, 255, 255, 0.95)', borderRadius: 1,
+                        backgroundColor: 'rgba(18, 18, 18, 0.95)', borderRadius: 1,
                     }}>
                         {connectProgress}
                     </Typography>

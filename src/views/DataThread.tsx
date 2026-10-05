@@ -314,10 +314,10 @@ const WorkspacePanel: FC<{
                     onClick={() => setWorkspaceExpanded(!workspaceExpanded)}
                 >
                     {workspaceExpanded ?
-                        <ExpandMoreIcon sx={{ fontSize: iconVar.sm, color: 'rgba(0,0,0,0.5)' }} /> :
-                        <ChevronRightIcon sx={{ fontSize: iconVar.sm, color: 'rgba(0,0,0,0.5)' }} />
+                        <ExpandMoreIcon sx={{ fontSize: iconVar.sm, color: 'rgba(255, 255, 255, 0.5)' }} /> :
+                        <ChevronRightIcon sx={{ fontSize: iconVar.sm, color: 'rgba(255, 255, 255, 0.5)' }} />
                     }
-                    <Typography sx={{ fontSize: textVar.xs, fontWeight: 600, color: 'rgba(0,0,0,0.55)', textTransform: 'uppercase', letterSpacing: '0.5px', ml: 0.5 }}>
+                    <Typography sx={{ fontSize: textVar.xs, fontWeight: 600, color: 'rgba(255, 255, 255, 0.55)', textTransform: 'uppercase', letterSpacing: '0.5px', ml: 0.5 }}>
                         {t('dataThread.workspace')}
                     </Typography>
                 </Box>
@@ -1393,7 +1393,7 @@ let SingleThreadGroupView: FC<{
             key: `turn-chain-toggle-${chainId}`,
             type: 'artifact' as const,
             highlighted: false,
-            gutterIcon: <ForumOutlinedIcon sx={{ width: 14, height: 14, color: 'rgba(0,0,0,0.25)' }} />,
+            gutterIcon: <ForumOutlinedIcon sx={{ width: 14, height: 14, color: 'rgba(255, 255, 255, 0.25)' }} />,
             element: (
                 <Box
                     onClick={() => setExpandedTurnChains(prev => {
@@ -1824,7 +1824,7 @@ let SingleThreadGroupView: FC<{
                         display: 'flex', flexDirection: 'column', alignItems: 'center',
                     }}>
                         <Box sx={{ width: 0, flex: '1 1 0', minHeight: 2, borderLeft: `${dashedWidth} ${dashedStyle} ${dashedColor}` }} />
-                        <Box sx={{ flexShrink: 0, zIndex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
+                        <Box sx={{ flexShrink: 0, zIndex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'background.paper' }}>
                             <CallMergeIcon sx={{ fontSize: iconVar.xs, color: item.highlighted ? theme.palette.primary.main : 'rgba(0,0,0,0.15)', transform: 'rotate(180deg)' }} />
                         </Box>
                         {!isLast && <Box sx={{ width: 0, flex: '1 1 0', minHeight: 2, borderLeft: `${bottomDashedWidth} ${bottomDashedStyle} ${bottomDashedColor}` }} />}
@@ -1967,7 +1967,7 @@ let SingleThreadGroupView: FC<{
                         // so the timeline reads as a single unbroken path.
                         <Box sx={{ flex: '1 1 0', minHeight: 6, ...dashedLineSx }} />
                     )}
-                    <Box sx={{ flexShrink: 0, zIndex: 1, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box sx={{ flexShrink: 0, zIndex: 1, backgroundColor: 'background.paper', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         {getTimelineDot(item)}
                     </Box>
                     {!isLast && (
@@ -2123,7 +2123,7 @@ const ChartThumbnail: FC<{
         return <Box 
             className="vega-thumbnail-box"
             onClick={() => onChartClick(chart.id, table.id)}
-            sx={{ width: "100%", color: 'text.secondary', height: 48, display: "flex", backgroundColor: "white", position: 'relative', flexDirection: "column" }}>
+            sx={{ width: "100%", color: 'text.secondary', height: 48, display: "flex", backgroundColor: 'background.paper', position: 'relative', flexDirection: "column" }}>
             {pendingOverlay}
             <InsightIcon sx={{ margin: 'auto', color: 'darkgray' }}  fontSize="medium" />
         </Box>;
@@ -2134,7 +2134,7 @@ const ChartThumbnail: FC<{
         return <Box key={`unavailable-${chart.id}`} width={"100%"}
             className={"vega-thumbnail vega-thumbnail-box"}
             onClick={() => onChartClick(chart.id, table.id)}
-            sx={{ display: "flex", backgroundColor: "white", position: 'relative', flexDirection: "column" }}>
+            sx={{ display: "flex", backgroundColor: 'background.paper', position: 'relative', flexDirection: "column" }}>
             {pendingOverlay}
             <Box sx={{ display: "flex", flexDirection: "column", margin: "auto", height: 48}}>
                 <Box sx={{ margin: "auto", transform: chart.chartType == 'Table' ? "rotate(15deg)" : undefined }} >
@@ -2188,7 +2188,7 @@ const ChartThumbnail: FC<{
                 <Box className={"vega-thumbnail"}
                     sx={{
                         display: "flex",
-                        backgroundColor: "white",
+                        backgroundColor: 'background.paper',
                         justifyContent: 'center',
                         alignItems: 'center',
                         minHeight: 60,
@@ -3210,7 +3210,7 @@ export const DataThread: FC<{sx?: SxProps, centered?: boolean, denseColumns?: bo
         let usedTableIds = entry.usedTableIds || [];
 
         const entrySx = {
-            backgroundColor: 'white',
+            backgroundColor: 'background.paper',
             borderRadius: radius.md,
             padding: useDenseColumns ? 0.5 : 1,
             my: useDenseColumns ? 0.25 : 0.5,

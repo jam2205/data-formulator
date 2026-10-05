@@ -124,9 +124,10 @@ const DiscordIcon: FC<{ sx?: any }> = ({ sx }) => (
 );
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
-    color: 'black',
-    backgroundColor: "transparent",
-    //borderBottom: "1px solid #C3C3C3",
+    // Top panel: Ferrari red, not the page's carbon background -- this is
+    // the one bar that should read as the brand color at a glance.
+    color: '#ffffff',
+    backgroundColor: theme.palette.primary.main,
     boxShadow: "none",
     transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.sharp,
@@ -1105,7 +1106,7 @@ const AppShell: FC = () => {
     return (
         <Box sx={{
             position: 'absolute',
-            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            backgroundColor: 'rgba(18, 18, 18, 0.3)',
             top: 0,
             left: 0,
             right: 0,

@@ -287,7 +287,7 @@ Write your rule content here in Markdown.
                                                 bgcolor: 'rgba(25, 118, 210, 0.08)',
                                                 boxShadow: 'inset 2px 0 0 rgba(25, 118, 210, 0.8)',
                                             },
-                                            '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.045)' },
+                                            '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.045)' },
                                         }}
                                     >
                                         <ListItemText

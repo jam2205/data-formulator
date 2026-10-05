@@ -120,7 +120,7 @@ export const CustomReactTable: React.FC<CustomReactTableProps> = ({
                                         key={column.id}
                                         align={column.align}
                                         sx={{
-                                            minWidth: column.minWidth, fontSize: textVar.sm, color: "#333",
+                                            minWidth: column.minWidth, fontSize: textVar.sm, color: "text.primary",
                                             backgroundColor: backgroundColor,
                                             borderBottomColor, borderBottomWidth: '1px', borderBottomStyle: 'solid',
                                             cursor: 'pointer',
@@ -146,7 +146,7 @@ export const CustomReactTable: React.FC<CustomReactTableProps> = ({
                         {sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, i) => {
                                 return (
-                                    <TableRow hover tabIndex={-1} key={i} sx={{ background: i % 2 == 0 ? '#F0F0F0' : "none" }}>
+                                    <TableRow hover tabIndex={-1} key={i} sx={{ background: i % 2 == 0 ? 'rgba(255, 255, 255, 0.04)' : "none" }}>
                                         {columnDefs.map((column, j) => {
                                             const value = row[column.id];
                                             let backgroundColor = "none";

@@ -20,7 +20,11 @@ const editorTheme = EditorView.theme({
     '&': {
         height: '100%',
         fontSize: textVar.sm,
-        backgroundColor: '#fff',
+        // CodeMirror's own theme object, not an MUI sx prop -- can't use a
+        // 'background.paper' theme-path reference here, has to be a literal.
+        // Hugh.Quant runs dark permanently (App.tsx), so this is that
+        // palette's paper color, not a light-mode default anymore.
+        backgroundColor: '#1a1a1a',
     },
     '&.cm-focused': { outline: 'none' },
     '.cm-scroller': {
@@ -34,7 +38,7 @@ const editorTheme = EditorView.theme({
     },
     '.cm-line': { padding: '0 18px' },
     '.cm-gutters': {
-        backgroundColor: '#f7f8fa',
+        backgroundColor: 'var(--hq-raised)',
         color: '#8a9099',
         borderRight: '1px solid #e2e5e9',
     },
@@ -55,7 +59,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ value, onChange,
             <Box sx={{
                 display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
                 minHeight: 34, px: 0.75, borderBottom: '1px solid', borderColor: 'divider',
-                bgcolor: '#f7f8fa', flexShrink: 0,
+                bgcolor: 'var(--hq-raised)', flexShrink: 0,
             }}>
                 <Tooltip title={lineWrap ? 'Disable line wrap' : 'Enable line wrap'}>
                     <IconButton
@@ -73,7 +77,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ value, onChange,
                     </IconButton>
                 </Tooltip>
             </Box>
-            <Box sx={{ flex: 1, minHeight: 0, overflow: 'hidden', bgcolor: readOnly ? '#fafafa' : 'background.paper' }}>
+            <Box sx={{ flex: 1, minHeight: 0, overflow: 'hidden', bgcolor: 'background.paper' }}>
                 <CodeMirror
                     value={value}
                     onChange={onChange}

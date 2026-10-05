@@ -289,7 +289,7 @@ export const EncodingBox: FC<EncodingBoxProps> = function EncodingBox({ channel,
         if (tooltip != "") {
             comp = <Tooltip key={`${key}-tooltip`} title={tooltip} arrow slotProps={{
                 tooltip: {
-                    sx: { bgcolor: 'rgba(255, 255, 255, 0.95)', color: 'rgba(0,0,0,0.95)', border: '1px solid darkgray' },
+                    sx: { bgcolor: 'rgba(18, 18, 18, 0.95)', color: 'rgba(255, 255, 255, 0.95)', border: '1px solid darkgray' },
                 },
             }}>{comp}</Tooltip>
         }
@@ -409,8 +409,8 @@ export const EncodingBox: FC<EncodingBoxProps> = function EncodingBox({ channel,
                     <Tooltip title={autoSortOptTitle} arrow componentsProps={{
                         tooltip: {
                           sx: {
-                            bgcolor: 'rgba(255, 255, 255, 0.95)',
-                            color: 'rgba(0,0,0,0.95)',
+                            bgcolor: 'rgba(18, 18, 18, 0.95)',
+                            color: 'rgba(255, 255, 255, 0.95)',
                             border: '1px solid darkgray'
                           },
                         },

@@ -224,7 +224,7 @@ export const About: FC<{}> = function About({ }) {
                 component="footer"
                 role="contentinfo"
                 sx={{ color: 'text.secondary', display: 'flex', 
-                    backgroundColor: 'rgba(255, 255, 255, 0.89)',
+                    backgroundColor: 'rgba(18, 18, 18, 0.89)',
                     alignItems: 'center', justifyContent: 'center' }}
             >
                 <Button size="small" color="inherit" 

@@ -81,14 +81,14 @@ const ActionRow: React.FC<ActionRowProps> = ({ icon, label, onClick }) => (
             mx: 1.5, my: 0.5,
             px: 1, py: 0.5,
             cursor: 'pointer',
-            color: '#252525',
-            border: '1px solid #d4d4d0',
+            color: 'var(--hq-text)',
+            border: '1px solid var(--hq-line)',
             borderRadius: 1,
-            bgcolor: '#f1f1ef',
+            bgcolor: 'var(--hq-raised)',
             transition: 'background-color 120ms ease, border-color 120ms ease',
             '&:hover': {
-                bgcolor: '#e5e5e1',
-                borderColor: '#bdbdb8',
+                bgcolor: '#2e2e2e',
+                borderColor: 'rgba(255, 255, 255, 0.3)',
             },
             '&:focus-visible': {
                 outline: '2px solid #6b6b6b',
@@ -332,7 +332,7 @@ export const KnowledgePanel: React.FC = () => {
                     borderRadius: 0.75,
                     cursor: 'pointer',
                     color: 'text.primary',
-                    '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.045)' },
+                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.045)' },
                     '&:hover .item-actions': { display: 'inline-flex' },
                     userSelect: 'none',
                 }}
@@ -439,15 +439,15 @@ export const KnowledgePanel: React.FC = () => {
         };
 
         return (
-            <Box key={category} sx={{ pb: 1, borderBottom: '1px solid rgba(0, 0, 0, 0.07)' }}>
+            <Box key={category} sx={{ pb: 1, borderBottom: '1px solid var(--hq-line)' }}>
                 <Box
                     sx={{
                         display: 'flex', alignItems: 'center',
                         px: 1.5, pt: 1.25, pb: 0.75,
-                        backgroundColor: 'rgba(255, 255, 255, 0.46)',
+                        backgroundColor: 'rgba(18, 18, 18, 0.46)',
                     }}
                 >
-                    <Typography sx={{ fontSize: textVar.xs, fontWeight: 700, color: 'rgba(0, 0, 0, 0.72)', letterSpacing: 0.6, textTransform: 'uppercase' }}>
+                    <Typography sx={{ fontSize: textVar.xs, fontWeight: 700, color: 'rgba(255, 255, 255, 0.72)', letterSpacing: 0.6, textTransform: 'uppercase' }}>
                         {label}
                     </Typography>
                 </Box>
@@ -485,9 +485,9 @@ export const KnowledgePanel: React.FC = () => {
                 <Box>
                     {renderCategorySection('rules', t('knowledge.rules'), t('knowledge.rulesHint'))}
                     {renderCategorySection('workflows', t('knowledge.workflows'), t('knowledge.workflowsHint'))}
-                    <Box sx={{ pb: 1, borderBottom: '1px solid rgba(0, 0, 0, 0.07)' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', px: 1.5, pt: 1.25, pb: 0.75, backgroundColor: 'rgba(255, 255, 255, 0.46)' }}>
-                            <Typography sx={{ fontSize: textVar.xs, fontWeight: 700, color: 'rgba(0, 0, 0, 0.72)', letterSpacing: 0.6, textTransform: 'uppercase' }}>
+                    <Box sx={{ pb: 1, borderBottom: '1px solid var(--hq-line)' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', px: 1.5, pt: 1.25, pb: 0.75, backgroundColor: 'rgba(18, 18, 18, 0.46)' }}>
+                            <Typography sx={{ fontSize: textVar.xs, fontWeight: 700, color: 'rgba(255, 255, 255, 0.72)', letterSpacing: 0.6, textTransform: 'uppercase' }}>
                                 {t('knowledge.dataMemory', { defaultValue: 'Data Memory' })}
                             </Typography>
                         </Box>

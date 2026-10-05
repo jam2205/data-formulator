@@ -1644,8 +1644,8 @@ const DataSourceSidebarPanel: React.FC<{
         minHeight: 40,
         px: 1.5,
         py: 0,
-        borderBottom: '1px solid rgba(0, 0, 0, 0.16)',
-        backgroundColor: 'rgba(255, 255, 255, 0.76)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.16)',
+        backgroundColor: 'rgba(18, 18, 18, 0.76)',
         flexShrink: 0,
         boxSizing: 'border-box',
     } as const;
@@ -1749,7 +1749,7 @@ const DataSourceSidebarPanel: React.FC<{
                     </Tooltip>
                 </Box>
                 {/* Search box: typing filters local cache, Enter/button searches backend. */}
-                <Box sx={{ px: 1.5, pt: 1, pb: 0.75, backgroundColor: 'rgba(255, 255, 255, 0.5)', borderBottom: '1px solid rgba(0, 0, 0, 0.06)' }}>
+                <Box sx={{ px: 1.5, pt: 1, pb: 0.75, backgroundColor: 'rgba(18, 18, 18, 0.5)', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
                     <TextField
                         size="small"
                         fullWidth
@@ -2300,7 +2300,7 @@ const DataSourceSidebarPanel: React.FC<{
                                 borderRadius: 0.75,
                                 backgroundColor: 'transparent',
                                 cursor: isRenaming ? 'default' : (activeWorkspace?.id === s.id ? 'default' : 'pointer'),
-                                '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.045)' },
+                                '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.045)' },
                                 '&:hover .row-actions': { display: 'flex' },
                                 '&:hover .row-timestamp': { visibility: 'hidden' },
                                 userSelect: 'none',

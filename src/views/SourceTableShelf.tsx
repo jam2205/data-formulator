@@ -629,7 +629,7 @@ export const SourceTableShelf: FC<{
             }}>
                 {/* The first row's lead-in is drawn by the header connector. */}
                 <Box aria-hidden sx={{ width: 0, flex: '1 1 0', minHeight: 6, borderLeft: RAIL_LINE }} />
-                <Box sx={{ flexShrink: 0, zIndex: 1, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Box sx={{ flexShrink: 0, zIndex: 1, backgroundColor: 'background.paper', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {isStreaming
                         ? <StreamIcon sx={{
                             width: 14, height: 14,
@@ -688,7 +688,7 @@ export const SourceTableShelf: FC<{
                     flex: 1,
                     fontSize: textVar.xs, fontWeight: 700,
                     textTransform: 'uppercase', letterSpacing: '0.02em',
-                    color: 'rgba(0,0,0,0.55)',
+                    color: 'rgba(255, 255, 255, 0.55)',
                 }}>
                     {t('dataThread.dataSources', { defaultValue: 'Data sources' })}
                 </Typography>
@@ -755,7 +755,7 @@ export const SourceTableShelf: FC<{
                         <Button
                             fullWidth
                             size="small"
-                            startIcon={<TableIcon sx={{ width: 14, height: 14, color: 'rgba(0,0,0,0.35)' }} />}
+                            startIcon={<TableIcon sx={{ width: 14, height: 14, color: 'rgba(255, 255, 255, 0.35)' }} />}
                             aria-label={t('dataThread.expand')}
                             aria-controls="data-source-shelf-content"
                             onClick={() => setSectionExpanded(true)}
@@ -809,7 +809,7 @@ export const SourceTableShelf: FC<{
                             py: 0.5,
                             borderRadius: '6px',
                             border: '1px dashed',
-                            borderColor: 'rgba(0,0,0,0.15)',
+                            borderColor: 'rgba(255, 255, 255, 0.15)',
                             color: 'text.secondary',
                             '& .MuiButton-startIcon': { mr: 0.5 },
                             '&:hover': {

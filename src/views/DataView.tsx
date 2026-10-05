@@ -161,7 +161,7 @@ export const FreeDataViewFC: FC<FreeDataViewProps> = function DataView({ maximiz
         return [
             {
                 id: "#rowId", label: "#", minWidth: 56, align: undefined as any, width: 56,
-                format: (value: any) => <Typography fontSize="inherit" color="rgba(0,0,0,0.65)">{value}</Typography>,
+                format: (value: any) => <Typography fontSize="inherit" color="text.secondary">{value}</Typography>,
                 dataType: Type.Number,
                 source: "original" as const,
             },

@@ -46,7 +46,7 @@
     "app": "App",
     "data": "Data",
     "moreOptions": "More options",
-    "microsoftResearch": "Microsoft Research"
+    "microsoftResearch": "FX research scratchpad"
   },
   "logs": {
     "title": "Backend Log",
@@ -123,7 +123,7 @@
     "maxStretchFactorHint": "How much charts can grow beyond the base size (1.0 = no stretch, 2.0 = up to 2×)."
   },
   "landing": {
-    "tagline": "Explore data with visualizations, powered by AI agents.",
+    "tagline": "The FX research scratchpad: look here, then test it in the loop.",
     "demos": "Demos",
     "demoBannerBody": "This is a demo site! Try the examples below or upload files. To work with large datasets, connect to databases, link local folders, create persisted analysis sessions, use custom models, and manage users, check the ",
     "demoBannerCta": "installation guide",

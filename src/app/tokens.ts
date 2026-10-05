@@ -11,30 +11,32 @@ import type { SxProps } from '@mui/material';
 
 // ── Border colors ──────────────────────────────────────────────────────
 
-// Hugh.Quant runs dark permanently (see App.tsx's `mode: 'dark'`), so these
-// are light-on-dark (white-alpha) rather than MUI's stock dark-on-light —
-// a literal `rgba(0,0,0,x)` border is close to invisible against the
-// `#0c0c0c`/`#1a1a1a` background these panels actually sit on.
+// Hugh.Quant runs dark permanently (see App.tsx's `mode: 'dark'`). Box-out
+// lines are Ferrari red (the hughquant palette's primary, #d40000) rather
+// than a neutral grey -- every card/panel/divider in the app pulls from
+// here, so this is the one place that sets the "red pinstripe" look
+// throughout. component < divider/view keeps the same visual hierarchy
+// (inner chrome quieter than outer containers) the neutral version had.
 export const borderColor = {
-    /** 0.12 — section dividers, table borders, tab underlines, sidebar edges
+    /** section dividers, table borders, tab underlines, sidebar edges
      *  DataLoadingChat, ExplComponents, RefreshDataDialog, ReportView tables,
      *  TableSelectionView, DataLoadingThread, DBTableManager */
-    divider: 'rgba(255, 255, 255, 0.12)',
+    divider: 'rgba(212, 0, 0, 0.55)',
 
-    /** 0.10 — inner components: cards, chips, inputs, thumbnails
+    /** inner components: cards, chips, inputs, thumbnails
      *  DataThreadCards table card, EncodingShelfCard tab divider */
-    component: 'rgba(255, 255, 255, 0.10)',
+    component: 'rgba(212, 0, 0, 0.4)',
 
-    /** 0.12 — outer containers: panels, dialogs, popovers, drop zones
+    /** outer containers: panels, dialogs, popovers, drop zones
      *  DataThread popups, UnifiedDataUploadDialog, AgentRulesDialog */
-    view: 'rgba(255, 255, 255, 0.12)',
+    view: 'rgba(212, 0, 0, 0.55)',
 } as const;
 
 /** Right edge of the collapsible sidebar: quiet when docked, clearer when it
  *  floats over the workspace. Kept separate from generic view borders because
  *  this edge is also a resize affordance. */
 export const sidebarEdge = {
-    border: 'rgba(255, 255, 255, 0.10)',
+    border: 'rgba(212, 0, 0, 0.4)',
     dockedShadow: '3px 0 10px -8px rgba(0, 0, 0, 0.6)',
     overlayShadow: '5px 0 16px -8px rgba(0, 0, 0, 0.6)',
 } as const;

@@ -649,7 +649,7 @@ export const SelectableDataGrid: React.FC<SelectableDataGridProps> = React.memo(
                     display: 'flex', 
                     alignItems: 'center', 
                     justifyContent: 'center',
-                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                    backgroundColor: 'rgba(18, 18, 18, 0.7)',
                     padding: '8px',
                     height: '100%',
                     borderTopLeftRadius: '4px',
@@ -691,7 +691,7 @@ export const SelectableDataGrid: React.FC<SelectableDataGridProps> = React.memo(
                                                         justifyContent: 'center',
                                                         borderBottomWidth: '2px',
                                                         borderBottomStyle: 'solid',
-                                                        borderBottomColor: 'rgba(0,0,0,0.2)',
+                                                        borderBottomColor: 'rgba(255, 255, 255, 0.2)',
                                                         padding: '4px 4px',
                                                         margin: '0 2px 0 0',
                                                     }}

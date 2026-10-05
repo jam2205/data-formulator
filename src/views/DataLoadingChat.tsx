@@ -164,7 +164,7 @@ const MarkdownContent = React.memo(({ content }: { content: string }) => {
                             return (
                                 <Box component="pre" sx={{
                                     m: 0, my: 0.75, p: 1.5, borderRadius: 1.5,
-                                    bgcolor: '#f6f6f6', color: '#1a1a1a',
+                                    bgcolor: 'var(--hq-raised)', color: 'var(--hq-text)',
                                     overflowX: 'hidden', overflowY: 'auto', maxHeight: 240,
                                     border: '1px solid', borderColor: 'divider',
                                 }}>
@@ -181,7 +181,7 @@ const MarkdownContent = React.memo(({ content }: { content: string }) => {
                         return (
                             <Typography component="code" sx={{
                                 fontSize: 'inherit', fontFamily: 'inherit',
-                                bgcolor: 'rgba(0,0,0,0.04)',
+                                bgcolor: 'rgba(255, 255, 255, 0.04)',
                                 px: 0.4, py: 0.1,
                                 borderRadius: 0.4,
                             }}>
@@ -314,8 +314,8 @@ const CodeBlockView: React.FC<{ block: CodeExecution }> = ({ block }) => {
             <Box
                 sx={{
                     display: 'flex', alignItems: 'center', px: 1.5, py: 0.5,
-                    cursor: 'pointer', bgcolor: 'rgba(0,0,0,0.03)',
-                    '&:hover': { bgcolor: 'rgba(0,0,0,0.05)' },
+                    cursor: 'pointer', bgcolor: 'rgba(255, 255, 255, 0.03)',
+                    '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.05)' },
                     transition: transition.fast,
                 }}
                 onClick={() => setExpanded(!expanded)}
@@ -331,13 +331,13 @@ const CodeBlockView: React.FC<{ block: CodeExecution }> = ({ block }) => {
                 {expanded ? <ExpandLessIcon sx={{ fontSize: iconVar.sm }} /> : <ExpandMoreIcon sx={{ fontSize: iconVar.sm }} />}
             </Box>
             <Collapse in={expanded}>
-                <Box sx={{ px: 1.5, py: 1, bgcolor: '#f6f6f6', overflow: 'auto', maxHeight: 200, borderTop: '1px solid', borderColor: 'divider' }}>
+                <Box sx={{ px: 1.5, py: 1, bgcolor: 'var(--hq-raised)', overflow: 'auto', maxHeight: 200, borderTop: '1px solid', borderColor: 'divider' }}>
                     <Typography component="pre" sx={{ fontFamily: CODE_FONT, fontSize: textVar.sm, m: 0, whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>
                         {block.code}
                     </Typography>
                 </Box>
                 {block.stdout && (
-                    <Box sx={{ px: 1.5, py: 0.75, borderTop: '1px solid rgba(0,0,0,0.08)', bgcolor: 'rgba(0,0,0,0.02)' }}>
+                    <Box sx={{ px: 1.5, py: 0.75, borderTop: '1px solid var(--hq-line)', bgcolor: 'rgba(255, 255, 255, 0.02)' }}>
                         <Typography component="pre" sx={{
                             fontFamily: CODE_FONT, fontSize: textVar.xs, m: 0,
                             whiteSpace: 'pre-wrap', maxHeight: 150, overflow: 'auto', color: 'text.secondary', lineHeight: 1.5,
@@ -347,7 +347,7 @@ const CodeBlockView: React.FC<{ block: CodeExecution }> = ({ block }) => {
                     </Box>
                 )}
                 {block.error && (
-                    <Box sx={{ px: 1.5, py: 0.75, borderTop: '1px solid rgba(0,0,0,0.08)', bgcolor: 'rgba(0,0,0,0.02)' }}>
+                    <Box sx={{ px: 1.5, py: 0.75, borderTop: '1px solid var(--hq-line)', bgcolor: 'rgba(255, 255, 255, 0.02)' }}>
                         <Typography component="pre" sx={{
                             fontFamily: CODE_FONT, fontSize: textVar.xs, m: 0,
                             whiteSpace: 'pre-wrap', color: 'text.secondary', lineHeight: 1.5,
@@ -717,7 +717,7 @@ const ChatBubble = React.memo<{
                     </Tooltip>
                 </Box>
                 {showDebug && (
-                    <Paper variant="outlined" sx={{ mt: 0.5, p: 1, borderRadius: 1, bgcolor: 'rgba(0,0,0,0.02)', maxHeight: 200, overflow: 'auto' }}>
+                    <Paper variant="outlined" sx={{ mt: 0.5, p: 1, borderRadius: 1, bgcolor: 'rgba(255, 255, 255, 0.02)', maxHeight: 200, overflow: 'auto' }}>
                         <Typography component="pre" sx={{ fontFamily: CODE_FONT, fontSize: textVar.xxs, m: 0, whiteSpace: 'pre-wrap', color: 'text.secondary' }}>
                             {JSON.stringify(message, null, 2)}
                         </Typography>

@@ -29,8 +29,25 @@
     --df-button-icon-gap: 6px;
 }
 
+/* Hugh.Quant dark surfaces. The MUI theme (App.tsx) is `mode: 'dark'` but
+   has no CssBaseline, so nothing painted the page: the body stayed browser
+   white under text coloured for a dark page. These are the same values as the
+   theme's background.default / paper and text.primary / secondary, for the
+   places that are styled outside the theme (scss, styled(), inline style). */
+:root {
+    --hq-bg: #0c0c0c;
+    --hq-paper: #1a1a1a;
+    --hq-raised: #242424;
+    --hq-text: #ececeb;
+    --hq-text-2: #a8a8a8;
+    --hq-line: rgba(255, 255, 255, 0.12);
+    color-scheme: dark;
+}
+
 html,
 body {
+    background: var(--hq-bg);
+    color: var(--hq-text);
     height: 100%;
     margin: 0;
     /* transform: translateZ(0); */

@@ -728,7 +728,11 @@ const VegaChartRenderer: FC<{
         const embedResult: { current?: Awaited<ReturnType<typeof embed>> } = {};
 
         el.innerHTML = '';
-        embed(el, { ...spec }, { actions: false, renderer: 'canvas' })
+        // Hugh.Quant is a dark page and Vega draws black text on a transparent
+        // ground by default, which made axes and legends unreadable. The 'dark'
+        // theme gives light text and gridlines; the ground stays transparent so
+        // the chart sits on the page rather than in a grey box.
+        embed(el, { ...spec }, { actions: false, renderer: 'canvas', theme: 'dark', config: { background: 'transparent' } })
             .then((result) => {
                 if (cancelled) {
                     result.finalize();
@@ -1514,7 +1518,7 @@ export const ChartEditorFC: FC<{}> = function ChartEditorFC({}) {
         <Box sx={{
             position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10,
             display: 'flex', alignItems: 'center', gap: 0.5, px: 1, py: '8px',
-            backgroundColor: '#fff',
+            backgroundColor: 'background.paper',
             pointerEvents: 'none', '& > *': { pointerEvents: 'auto' },
         }}>
             {chartResizer}

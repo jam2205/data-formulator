@@ -78,13 +78,13 @@ $accelerate-ease: cubic-bezier(0.4, 0.0, 1, 1);
 
 @keyframes bump {
     0% {
-      background-color: #fff;
+      background-color: transparent;
     }
     50% {
       background-color: rgba( 2, 136, 209, 0.2);
     }
     100% {
-      background-color: #fff;
+      background-color: transparent;
     }
 }
 

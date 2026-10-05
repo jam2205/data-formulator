@@ -414,8 +414,8 @@ export const AgentChatInput: React.FC<AgentChatInputProps> = ({
                                     sx={{
                                         position: 'absolute', top: -4, right: -4,
                                         width: 18, height: 18,
-                                        bgcolor: 'rgba(0,0,0,0.55)', color: 'white',
-                                        '&:hover': { bgcolor: 'rgba(0,0,0,0.75)' },
+                                        bgcolor: 'rgba(255, 255, 255, 0.55)', color: 'white',
+                                        '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.75)' },
                                     }}>
                                     <CloseIcon sx={{ fontSize: iconVar.xs }} />
                                 </IconButton>

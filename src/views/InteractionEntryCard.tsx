@@ -177,7 +177,7 @@ export const CompactMarkdown: React.FC<{ content: string; color: string }> = ({ 
                     <Box component="code" sx={{
                         fontSize: '0.9em',
                         fontFamily: 'var(--df-font-mono)',
-                        bgcolor: 'rgba(0,0,0,0.04)', px: 0.4, py: 0.1, borderRadius: '3px',
+                        bgcolor: 'rgba(255, 255, 255, 0.04)', px: 0.4, py: 0.1, borderRadius: '3px',
                     }}>
                         {children}
                     </Box>
@@ -204,15 +204,15 @@ export const CompactMarkdown: React.FC<{ content: string; color: string }> = ({ 
                 ),
                 th: ({ children }) => (
                     <Box component="th" sx={{
-                        border: '1px solid rgba(0,0,0,0.12)', px: '5px', py: '2px',
-                        textAlign: 'left', fontWeight: 600, bgcolor: 'rgba(0,0,0,0.03)',
+                        border: '1px solid rgba(255, 255, 255, 0.12)', px: '5px', py: '2px',
+                        textAlign: 'left', fontWeight: 600, bgcolor: 'rgba(255, 255, 255, 0.03)',
                     }}>
                         {children}
                     </Box>
                 ),
                 td: ({ children }) => (
                     <Box component="td" sx={{
-                        border: '1px solid rgba(0,0,0,0.12)', px: '5px', py: '2px', verticalAlign: 'top',
+                        border: '1px solid rgba(255, 255, 255, 0.12)', px: '5px', py: '2px', verticalAlign: 'top',
                     }}>
                         {children}
                     </Box>

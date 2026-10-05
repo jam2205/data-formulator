@@ -82,48 +82,9 @@ function parseYamlValue(v: string): any {
 }
 
 // Legacy hardcoded list — kept as fallback if manifest fails to load.
-export const exampleSessions: ExampleSession[] = [
-    {
-        id: 'stock-prices',
-        title: 'Stock Prices',
-        description: 'Stock prices for different companies',
-        previewImage: '/demos/screenshot-stock-price-live-thumbnail.webp',
-        workspace: '/demos/demo_stock-prices.zip',
-        live: false,
-    },
-    {
-        id: 'gas-prices',
-        title: 'Gas Prices',
-        description: 'Weekly gas prices across different grades and formulations',
-        previewImage: '/demos/gas_prices-thumbnail.webp',
-        workspace: '/demos/demo_gas-prices.zip',
-        live: false,
-    },
-    {
-        id: 'global-energy',
-        title: 'Global Energy',
-        description: 'Explore global energy consumption and CO2 emissions data',
-        previewImage: '/demos/global_energy-thumbnail.webp',
-        workspace: '/demos/demo_global-energy.zip',
-        live: false,
-    },
-    {
-        id: 'movies',
-        title: 'Movies',
-        description: 'Analyze movie performance, budgets, and ratings data',
-        previewImage: '/demos/movies-thumbnail.webp',
-        workspace: '/demos/demo_movies.zip',
-        live: false,
-    },
-    {
-        id: 'unemployment',
-        title: 'Unemployment',
-        description: 'Unemployment rates across different industries over time',
-        previewImage: '/demos/unemployment-thumbnail.webp',
-        workspace: '/demos/demo_unemployment.zip',
-        live: false,
-    }
-];
+// Empty on purpose: Hugh.Quant shows no upstream demo studies. Cards come only from
+// /demos/demos.yaml, which is empty too (see the note there).
+export const exampleSessions: ExampleSession[] = [];
 
 // Session card component for displaying example sessions
 export const ExampleSessionCard: React.FC<{
@@ -142,7 +103,7 @@ export const ExampleSessionCard: React.FC<{
                 gap: 0,
                 p: 0,
                 overflow: 'hidden',
-                borderColor: 'rgba(0, 0, 0, 0.18)',
+                borderColor: 'rgba(255, 255, 255, 0.18)',
                 boxShadow: '0 1px 3px rgba(32, 33, 36, 0.06)',
                 '&:hover': disabled ? {} : {
                     transform: 'translateY(-2px)',

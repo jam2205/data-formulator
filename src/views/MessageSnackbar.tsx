@@ -86,8 +86,8 @@ const DiagnosticsViewer: React.FC<{ diagnostics: any }> = React.memo(({ diagnost
                     fontSize: textVar.xxs,
                     margin: '2px 0',
                     padding: '6px 8px',
-                    backgroundColor: '#f5f0ff',
-                    border: '1px solid #e0d4f5',
+                    backgroundColor: 'rgba(160, 120, 255, 0.12)',
+                    border: '1px solid rgba(160, 120, 255, 0.35)',
                     borderRadius: 3,
                     maxHeight: 400,
                     overflow: 'auto',
@@ -191,7 +191,7 @@ export const MessageSnackbar = React.memo(function MessageSnackbar() {
                         width: 30,
                         height: 30,
                         zIndex: 10,
-                        backgroundColor: 'white',
+                        backgroundColor: 'background.paper',
                         border: '1px solid',
                         borderColor: buttonSeverity === "default" ? 'grey.400' : `${buttonSeverity}.main`,
                         boxShadow: '0 0 6px rgba(0,0,0,0.1)',
@@ -199,7 +199,7 @@ export const MessageSnackbar = React.memo(function MessageSnackbar() {
                         transition: 'all 0.3s ease',
                         '&:hover': {
                             transform: 'scale(1.1)',
-                            backgroundColor: 'white',
+                            backgroundColor: 'background.paper',
                         },
                     }}
                     onClick={() => setOpenMessages(true)}
@@ -308,7 +308,7 @@ export const MessageSnackbar = React.memo(function MessageSnackbar() {
                                                         fontSize: textVar.xxs,
                                                         margin: '2px 0',
                                                         padding: '4px 8px',
-                                                        backgroundColor: '#f8f8f8',
+                                                        backgroundColor: 'var(--hq-raised)',
                                                         borderRadius: 3,
                                                     }}>
                                                         {msg.code.split('\n').filter(line => line.trim() !== '').join('\n')}

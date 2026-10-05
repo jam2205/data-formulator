@@ -441,7 +441,7 @@ const ChecklistFilterForm: React.FC<ChecklistFormProps> = ({
                 />
                 {includeNullRow && (
                     <ChecklistRow
-                        label={<i style={{ color: 'rgba(0,0,0,0.55)' }}>{t('dataGrid.filter.blank')}</i>}
+                        label={<i style={{ color: 'rgba(255, 255, 255, 0.55)' }}>{t('dataGrid.filter.blank')}</i>}
                         count={showCounts ? nullCount : undefined}
                         checked={selected.has(null)}
                         onToggle={() => toggle(null)}

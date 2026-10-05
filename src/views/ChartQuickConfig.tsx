@@ -313,11 +313,11 @@ export const ChartQuickConfig: FC<ChartQuickConfigProps> = function ({ chartId, 
                             sx={{
                                 fontSize: textVar.xs, height: '22px', minWidth: 60,
                                 color: 'text.secondary',
-                                '&:before': { borderBottomColor: 'rgba(0,0,0,0.2)' },
-                                '&:hover:not(.Mui-disabled):before': { borderBottomColor: 'rgba(0,0,0,0.42)' },
-                                '&:after': { borderBottomColor: 'rgba(0,0,0,0.42)' },
+                                '&:before': { borderBottomColor: 'rgba(255, 255, 255, 0.2)' },
+                                '&:hover:not(.Mui-disabled):before': { borderBottomColor: 'rgba(255, 255, 255, 0.42)' },
+                                '&:after': { borderBottomColor: 'rgba(255, 255, 255, 0.42)' },
                                 '& .MuiSelect-select': { padding: '1px 18px 1px 2px !important', fontSize: textVar.xs },
-                                '& .MuiSvgIcon-root': { fontSize: iconVar.sm, right: 0, color: 'rgba(0,0,0,0.4)' },
+                                '& .MuiSvgIcon-root': { fontSize: iconVar.sm, right: 0, color: 'rgba(255, 255, 255, 0.4)' },
                             }}
                             renderValue={(idx: number) => <span style={{ fontSize: textVar.xs }}>{options[idx]?.label || 'Default'}</span>}
                         >

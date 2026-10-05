@@ -721,7 +721,7 @@ export const DataFormulatorFC = ({ }) => {
                 onStartDataLoadingChat={(text) => startDataLoadingChat(text)}
             />
             <Box ref={containerRef} className="outer-allotment" sx={{
-                    margin: '4px 8px 8px 8px', backgroundColor: 'white',
+                    margin: '4px 8px 8px 8px', backgroundColor: 'background.paper',
                     display: 'flex', height: 'calc(100% - 12px)', flex: 1, minWidth: 0, flexDirection: 'column',
                     overflow: 'hidden',
                     position: 'relative',
@@ -766,7 +766,7 @@ export const DataFormulatorFC = ({ }) => {
     );
 
     let footer = <Box sx={{ color: 'text.secondary', display: 'flex', 
-            backgroundColor: 'rgba(255, 255, 255, 0.89)',
+            backgroundColor: 'rgba(18, 18, 18, 0.89)',
             alignItems: 'center', justifyContent: 'center' }}>
         <Button size="small" color="inherit" 
             sx={{ textTransform: 'none'}} 
@@ -797,7 +797,7 @@ export const DataFormulatorFC = ({ }) => {
         <Box sx={{mx:'auto', pb: 8, display: "flex", flexDirection: "column", textAlign: "center", maxWidth: 1024, width: '100%', px: 2, boxSizing: 'border-box' }}>
             {/* Hero — fills the viewport so title + input own the first screen;
                 Demos/Sessions live below the fold and just peek up. */}
-            <Box sx={{ minHeight: 'calc(100vh - 150px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <Box sx={{ minHeight: demoSessions.length > 0 ? 'calc(100vh - 150px)' : 'calc(62vh - 150px)', pt: demoSessions.length > 0 ? 0 : 6, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.25 }, mx: 'auto' }}>
                 <Box
                     component="img"
@@ -931,6 +931,7 @@ export const DataFormulatorFC = ({ }) => {
             {/* Demos — promoted ahead of "Your Sessions" on the hosted
                 demo, since first-time visitors won't have any sessions
                 yet and demos are the most engaging entry point. */}
+            {demoSessions.length > 0 && (
             <Box sx={{mt: 3}}>
                 <Typography sx={{ color: alpha(theme.palette.text.primary, 0.76), fontSize: textVar.md, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'left', mb: 2 }}>
                     {t('landing.demos')}
@@ -949,9 +950,10 @@ export const DataFormulatorFC = ({ }) => {
                     ))}
                 </Box>
             </Box>
+            )}
 
             {/* ── Saved workspaces section ──────────────────────────── */}
-            <Box sx={{mt: 8}}>
+            <Box sx={{mt: demoSessions.length > 0 ? 8 : 5}}>
                 {/* Section header — left-aligned label with the sort control
                     on the right, aligned to the card grid. */}
                 <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', mb: 2 }}>
@@ -1046,19 +1048,19 @@ export const DataFormulatorFC = ({ }) => {
                                 transition: 'opacity 0.15s',
                             }}>
                                 <Tooltip title={t('workspace.rename')}>
-                                    <IconButton size="small" sx={{ color: 'text.secondary', backgroundColor: 'rgba(255,255,255,0.85)', '&:hover': { backgroundColor: 'rgba(240,240,240,0.95)' } }}
+                                    <IconButton size="small" sx={{ color: 'text.secondary', backgroundColor: 'rgba(18, 18, 18, 0.85)', '&:hover': { backgroundColor: 'rgba(240,240,240,0.95)' } }}
                                         onClick={(e) => { e.stopPropagation(); startRenameWorkspace(w.id, w.display_name); }}>
                                         <EditOutlinedIcon fontSize="small" />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title={t('workspace.export')}>
-                                    <IconButton size="small" sx={{ color: 'text.secondary', backgroundColor: 'rgba(255,255,255,0.85)', '&:hover': { backgroundColor: 'rgba(240,240,240,0.95)' } }}
+                                    <IconButton size="small" sx={{ color: 'text.secondary', backgroundColor: 'rgba(18, 18, 18, 0.85)', '&:hover': { backgroundColor: 'rgba(240,240,240,0.95)' } }}
                                         onClick={(e) => { e.stopPropagation(); handleExportWorkspace(w.id); }}>
                                         <DownloadIcon fontSize="small" />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title={t('workspace.delete')}>
-                                    <IconButton size="small" sx={{ color: 'text.secondary', backgroundColor: 'rgba(255,255,255,0.85)', '&:hover': { backgroundColor: 'rgba(240,240,240,0.95)' } }}
+                                    <IconButton size="small" sx={{ color: 'text.secondary', backgroundColor: 'rgba(18, 18, 18, 0.85)', '&:hover': { backgroundColor: 'rgba(240,240,240,0.95)' } }}
                                         onClick={(e) => { e.stopPropagation(); setConfirmDeleteWs(w.id); }}>
                                         <DeleteOutlineIcon fontSize="small" />
                                     </IconButton>
