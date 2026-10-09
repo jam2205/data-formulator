@@ -318,7 +318,8 @@ export function buildDictTableFromWorkspace(
             type: 'database',
             databaseTable: wsTable.name,
             canRefresh: sourceMeta != null,
-            lastRefreshed: Date.now(),
+            // When the copy was really taken, not when this page happened to list it.
+            lastRefreshed: sourceMeta?.last_refreshed ? Date.parse(sourceMeta.last_refreshed) : undefined,
             originalTableName: backendOriginalName,
         };
     }

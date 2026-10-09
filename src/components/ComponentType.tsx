@@ -329,6 +329,11 @@ export interface DataSourceConfig {
     // Whether this table can be refreshed (backend has connection info)
     canRefresh?: boolean;
 
+    // Hugh.Quant: a large connector table that does not poll but is refreshed once
+    // each time its session is opened (see useDataRefresh.tsx). Cleared as soon as
+    // the user sets the table's refresh settings by hand.
+    hqRefreshOnOpen?: boolean;
+
     // Connector ID (for tables loaded via a DataConnector)
     connectorId?: string;
 

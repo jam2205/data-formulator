@@ -1231,11 +1231,14 @@ export const dataFormulatorSlice = createSlice({
             state.inputTables = state.inputTables.map(t => t.id == tableId ? {...t, sourceConfig: source} : t);
             state.derivedTables = state.derivedTables.map(t => t.id == tableId ? {...t, source} : t);
         },
-        updateTableSourceRefreshSettings: (state, action: PayloadAction<{tableId: string, autoRefresh: boolean, refreshIntervalSeconds?: number}>) => {
+        updateTableSourceRefreshSettings: (state, action: PayloadAction<{tableId: string, autoRefresh: boolean, refreshIntervalSeconds?: number, hqRefreshOnOpen?: boolean}>) => {
             // Update just the refresh settings of a table's source
             let tableId = action.payload.tableId;
             let autoRefresh = action.payload.autoRefresh;
             let refreshIntervalSeconds = action.payload.refreshIntervalSeconds;
+            // Only the Hugh.Quant default passes this; a change made in the shelf does
+            // not, so a choice made by hand always ends the refresh-on-open behaviour.
+            let hqRefreshOnOpen = action.payload.hqRefreshOnOpen ?? false;
             state.inputTables = state.inputTables.map(t => {
                 if (t.id == tableId && t.sourceConfig) {
                     return {
@@ -1243,6 +1246,7 @@ export const dataFormulatorSlice = createSlice({
                         sourceConfig: {
                             ...t.sourceConfig,
                             autoRefresh,
+                            hqRefreshOnOpen,
                             ...(refreshIntervalSeconds !== undefined ? { refreshIntervalSeconds } : {})
                         }
                     };
@@ -1251,7 +1255,7 @@ export const dataFormulatorSlice = createSlice({
             });
             state.derivedTables = state.derivedTables.map(t => {
                 if (t.id != tableId || !t.source) return t;
-                return { ...t, source: { ...t.source, autoRefresh, ...(refreshIntervalSeconds !== undefined ? { refreshIntervalSeconds } : {}) } };
+                return { ...t, source: { ...t.source, autoRefresh, hqRefreshOnOpen, ...(refreshIntervalSeconds !== undefined ? { refreshIntervalSeconds } : {}) } };
             });
         },
         upsertTableSemantics: (state, action: PayloadAction<TableSemanticsInfo>) => {

@@ -26,6 +26,32 @@ interface RefreshResult {
     contentHash?: string; // Hash from backend for database sources
 }
 
+// Hugh.Quant: a table imported from a connector is a COPY taken at import time,
+// and upstream leaves auto-refresh off, so a session opened the next day showed
+// yesterday's rows with nothing saying so. The Jetson republishes every 15
+// minutes, so that is the default interval here.
+//
+// Only tables under HQ_AUTO_REFRESH_MAX_ROWS poll. A large one is a bulk read
+// over the direct link to the Jetson, and repeating those every 15 minutes is
+// what has made that link drop before; those are refreshed once when the page
+// loads the session, one after another, and after that only by hand.
+//
+// The default is written into the table's own refresh settings the first time
+// the table is seen with none, so the shelf shows what is really happening and
+// switching it off there is remembered.
+export const HQ_REFRESH_SECONDS = 900;
+export const HQ_AUTO_REFRESH_MAX_ROWS = 100_000;
+const HQ_ON_OPEN_GAP_MS = 2000;
+// Per page load, not per hook instance: the shelf that mounts this hook can
+// unmount and mount again, and that must not fetch every large table again.
+const hqOnOpenDone = new Set<string>();
+let hqOnOpenQueue: Promise<void> = Promise.resolve();
+
+const hqRowCount = (t: DictTable): number => t.virtual?.rowCount ?? t.rows.length;
+const hqConnectorTable = (t: DictTable): boolean =>
+    !t.derive && t.source?.type === 'database' && t.source.canRefresh === true &&
+    !!t.source.connectorId && !!t.virtual?.tableId;
+
 /**
  * Custom hook that manages automatic data refresh for tables with streaming or database sources.
  * It sets up intervals for each table that has auto-refresh enabled.
@@ -390,6 +416,50 @@ export function useDataRefresh() {
             isActiveRef.current.clear();
         };
     }, [refreshConfigs, performRefresh, scheduleNextRefresh, getLatestTable]);
+
+    /**
+     * Hugh.Quant defaults (see the note at the top of this file).
+     * 1. A connector table with no refresh setting yet gets one: on every 15
+     *    minutes if it is small, off if it is large.
+     * 2. Large connector tables present when the session is loaded are refreshed
+     *    once, in sequence.
+     */
+    const workspaceId = useSelector((state: DataFormulatorState) => state.activeWorkspace?.id);
+    useEffect(() => {
+        tablesRef.current.forEach((t) => {
+            if (!hqConnectorTable(t)) return;
+            const unset = t.source!.autoRefresh === undefined;
+            const large = hqRowCount(t) >= HQ_AUTO_REFRESH_MAX_ROWS;
+            if (unset) {
+                dispatch(dfActions.updateTableSourceRefreshSettings({
+                    tableId: t.id,
+                    autoRefresh: !large,
+                    refreshIntervalSeconds: HQ_REFRESH_SECONDS,
+                    hqRefreshOnOpen: large,
+                }));
+            }
+            // The row count is only trusted the first time (a refresh can overwrite it
+            // with the size of the sample); after that the stored flag decides.
+            const onOpen = unset ? large : t.source!.hqRefreshOnOpen === true;
+            // lastRefreshed is stamped when a table is imported in this page; a table
+            // restored with the session has an older stamp or none.
+            const justImported = !!t.source!.lastRefreshed && Date.now() - t.source!.lastRefreshed < 60_000;
+            const key = `${workspaceId ?? ''}:${t.id}`;
+            if (onOpen && !hqOnOpenDone.has(key)) {
+                hqOnOpenDone.add(key);
+                if (justImported) return;
+                const id = t.id;
+                hqOnOpenQueue = hqOnOpenQueue.then(async () => {
+                    const latest = getLatestTable(id);
+                    if (latest) {
+                        console.log(`[DataRefresh] Refreshing large table "${id}" once on session open`);
+                        await performRefresh(latest);
+                        await new Promise((r) => setTimeout(r, HQ_ON_OPEN_GAP_MS));
+                    }
+                });
+            }
+        });
+    }, [refreshConfigs, workspaceId, dispatch, getLatestTable, performRefresh]);
 
     /**
      * Manual refresh function that can be called from components
